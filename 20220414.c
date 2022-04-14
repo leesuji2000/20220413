@@ -217,3 +217,89 @@
 //	system("pause");
 //	return 0;
 //}
+
+//전처리기: 다른 프로그램 영역과 독립적으로 처리된다, 소스코드 파일 단위로 효력 존재
+
+//파일 포함 전처리기
+//#include 는 전처리기에서 가장 많이 사용되는 문법, 라이브러리로 포함시킨다
+//#include를 이용하면 어떤 파일도 가져올 수 있다.
+//#include <파일이름> : 시스템 디렉토리에서 파일을 검색, 운영체제마다 시스템 디렉토리가 존재하는 경로가 다를 수 있다
+//#include "파일이름" : 현재 폴더에서 파일을 먼저 검색후, 없다면 시스템 디렉토리에서 파일을 검색
+
+//#include <stdio.h>
+//#include "temp.h"
+//
+//int main(void) {
+//	printf("%d\n", add(2, 3));
+//	system("pause");
+//	return 0;
+//}
+
+//매크로 전처리기: 프로그램 내에서 사용되는 상수나 함수를 매크로 형태로 저장하기 위해 사용
+//일반적으로 자주 사용한는 상수나 함수를 매크로 전처리기(#define)를 이용해서 나타낸다.
+
+//#include <stdio.h>
+//#define PI 3.14
+//int main(void) {
+//	int r = 3;
+//	printf("%.2f\n", 2*PI*r);
+//	system("pause");
+//	return 0;
+//}
+
+//인자를 가지는 매크로 전처리기: 함수와 같은 형태로 인자를 받을 수 있다.
+//#include <stdio.h>
+//#define POW(x) (x*x)
+//int main(void) {
+//	int r = 3;
+//	printf("%d\n", POW(r));
+//	system("pause");
+//	return 0;
+//}
+
+//전처리기 #define 은 코드를 쓰는 시간을 획기적으로 줄여준다.
+//#include <stdio.h>
+//#define ll long long
+//#define ld long double
+//int main(void) {
+//	ll a = 2324642677;
+//	ld b = 31515.3466;
+//	printf("%.2f\n", a * b);
+//	system("pause");
+//	return 0;
+//}
+
+//조건부 컴파일: 컴파일이 이루어지는 영역을 지정하는 기법
+//일반적으로 디버깅과 소스코드 이식을 목적으로 작성
+//c언어로 시스템 프로그램을 작성할때, 운영체제에 따라서 소스코드가 달라질 수 있다.
+//이떄 운영체제에 따라서 컴파일이 수행되는 소스코드를 다르게 할 수 있다.
+//하드웨어에 가까운 운영체제를 다룰때, 각각에 맞는 소스파일을 넣어야 할 때 사용한다.
+
+//조건부 컴파일 #ifndef ~ #endif 문법
+//헤더 파일의 내용이 중복되어 사용되지 않도록 주의
+
+
+//#include <stdio.h>
+//#include "temp.h"
+//#include "temp.h"//temp.h파일에 있는 조건부 컴파일 #ifndef ~ #endif에 의해서 중복해서 작성해도 오류 안뜬다.
+//
+//int main(void) {
+//	printf("%d\n", add(2, 3));
+//	system("pause");
+//	return 0;
+//}
+
+//파일 분할 컴파일
+//일반적으로 자신이 직접 라이브러리를 만들때, c언어 파일과, 헤더파일을 모두 작성해야 한다.
+//분할을 통해서 좀 더 효율적이고 체계적인 관리를 할 수 있다
+
+#include <stdio.h>
+#include "temp1.h"
+
+
+int main(void) {
+	printf("%d\n", add(2, 3));
+	system("pause");
+	return 0;
+}
+
