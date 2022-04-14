@@ -7,7 +7,7 @@
 //코드영역(소스코드), 데이터영역(전역변수, 정적변수), 힙 영역(동적할당변수), 스택영역(지역변수, 매개변수)
 
 //전역변수(global variable): 프로그램 어디서든 접근 가능한 변수
-//main 함수가 실행되기 전에 프로그램 시작과 동시에 메모리(데이터영영)에 할당
+//main 함수가 실행되기 전에 프로그램 시작과 동시에 메모리(데이터영역)에 할당
 //프로그램의 크기가 커질 수록 전역 변수로 인해 프로그램이 복잡해질 수 있다.
 
 //#include <stdio.h> 
@@ -198,15 +198,141 @@
 //}
 
 //2차원 배열을 포인터로 처리하는 방법(2중포인터)
+//#include <stdio.h>
+//int main(void) {
+//	int a[2][5] = { {1, 2, 3, 4, 5}, {6, 7, 8, 9, 10} };
+//	int(*p)[5] = a[1]; // a의 2번째 행인 6을 가리키는 
+//	
+//	for (int i = 0; i < 5; i++) {
+//		printf("%d ", p[0][i]);
+//	}
+//	printf("\n%d", *(p[0]+2));
+//	
+//	system("pause");
+//	return 0;
+//}
+
+//동적메모리할당: 배열을 사용할때 미리 적절한 크키만큼 할당해줘야 한다. 
+//우리가 원하는 만큼 메모리를 할당해서 사용하고자 할떄 동적메모리할당을 사용한다. 동적(프로그램 실행도중) 메모리를 할당해준다.
+//필요할때 원하는 만큼만 할당해서 사용한다.
+//malloc()함수를 이용해서 원하는 만큼 메모리 공간을 확보한다.
+//malloc()함수는 메모리 할당에 성공하면, 주소를 반환하고, 그렇지 않으면 null값을 반환한다.
+//메모리(램)에 있는 주소를 반환한다는 의미
+//<stdlib.h>라이브러리에 정의되어 있다.
+//malloc(할당할 바이트크기);
+//동적메모리할당을 수행할 때마다 할당되는 포인터의 주소는 변칙적이다.
+//동적할당변수는 힙 메모리 영역에 저장된다
+
+//#include <stdio.h>
+//#include <stdlib.h>
+//int main(void) {
+//	int* a = malloc(sizeof(int)); // 4를 넣는 것과 같다.
+//	printf("%d\n", a);
+//	a = malloc(sizeof(int));
+//	printf("%d\n", a);
+//	system("pause");
+//	return 0;
+//}
+
+//전통적인 c언어에서 스택에 선언된 변수(지역변수, 매개변수)는 따로 해제해주지 않아도 된다.
+//하지만 동적할당 변수는 반드시 free()함수로 메모리 해제를 해줘야 한다.
+//메모리 해제를 하지 않으면 메모리 내의 프로세스 무게가 더해져 언제가 오류가 발생한다.
+//메모리 누수방지는 코어 개발자의 핵심역량이다
+
+//#include <stdio.h>
+//#include <stdlib.h>
+//int main(void) {
+//	int* a = malloc(sizeof(int));
+//	printf("%d\n", a);
+//	free(a);
+//	a = malloc(sizeof(int));
+//	printf("%d\n", a);
+//	free(a);
+//	system("pause");
+//	return 0;
+//
+//}
+//한번 할당한 후, 해제를 해주면 그 공간이 비어있고, 다시 할당을 하면 비어있는 이전 공간으로 들어갈 확률이 높아
+//주소가 같게 나오는 것이다.
+//free()안하면 갑자기 프로그램이 꺼지는 위험이 있다.
+
+//동적으로 문자열 처리하기
+//일괄적인 범위의 메모리를 모두 특정한 값으로 설정하기 위해서 memset()을 사용
+//memset(포인터, 값, 크기);
+//한 바이트 씩 값을 저장하므로 문자열 배열의 처리방식과 비슷 -> <string.h>에 정의됨
+
+//memset()함수를 이용해서 A로 채워진 메모리할당
+//#include <stdio.h>
+//#include <stdlib.h>
+//int main(void) {
+//	char* a = malloc(100);
+//	memset(a, 'A', 100);
+//	for (int i = 0; i < 100; i++) {
+//		printf("%c ", a[i]);
+//	}
+//	system("pause");
+//	return 0;
+//}
+
+//동적메모리할당 + 2중 포인터
+//3*3 표 만든 후에 값 출력하기
+//#include <stdio.h>
+//#include <stdlib.h>
+//int main(void) {
+//	int** p = (int**)malloc(sizeof(int*) * 3);
+//	for (int i = 0; i < 3; i++) {
+//		*(p + i) = (int*)malloc(sizeof(int) * 3);
+//	}
+//	for (int i = 0; i < 3; i++) {
+//		for (int j = 0; j < 3; j++) {
+//			*(*(p + i) + j) = i * 3 + j;
+//		}
+//	}
+//	for (int i = 0; i < 3; i++) {
+//		for (int j = 0; j < 3; j++) {
+//			printf("%d ", *(*(p + i) + j));
+//
+//		}
+//		printf("\n");
+//	}
+//	system("pause");
+//	return 0;
+//}
 #include <stdio.h>
+#include <stdlib.h>
 int main(void) {
-	int a[2][5] = { {1, 2, 3, 4, 5}, {6, 7, 8, 9, 10} };
-	int(*p)[5] = a[1]; // a의 2번째 행인 6을 가리키는 
-	for (int i = 0; i < 5; i++) {
-		printf("%d ", p[0][i]);
+	int** p = (int**)malloc(sizeof(int*) * 3);
+	for (int i = 0; i < 3; i++) {
+		*(p + i) = (int*)malloc(sizeof(int) * 3);
 	}
-	
-	system("pause");
-	return 0;
+	for (int i = 0; i < 3; i++) {
+		for (int j = 0; j < 3; j++) {
+			*((*(p + i)) + j) = 3 * i + j;
+
+		}
+	}
+	for (int i = 0; i < 3; i++) {
+		for (int j = 0; j < 3; j++) {
+			printf("%d ", *((*(p + i)) + j)); 
+		}
+		printf("\n");
+	}
 }
 
+//#include <stdio.h>
+//#include <stdlib.h>
+//int main(void) {
+//	int** p = (int**)malloc(sizeof(int*) * 3);
+//	for (int i = 0; i < 3; i++) {
+//		*(p + i) = (int*)malloc(sizeof(int) * 3);
+//	}
+//	for (int i = 0; i < 3; i++) {
+//		for (int j = 0; j < 3; j++) {
+//			p[i][j] = i * j;
+//			printf("%d ", p[i][j]);
+//		}
+//	}
+//	system("pause");
+//	return 0;
+//
+//}
