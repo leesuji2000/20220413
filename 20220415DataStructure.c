@@ -81,16 +81,16 @@
 //마지막 노드의 next가 가리키는 값은 없으므로 null값을 넣는다.
 
 //연결리스트 구조체 만들기
-#define _CRT_SECURE_NO_WARNINGS_
-#include <stdio.h>
-#include <stdlib.h>
-
-typedef struct {
-	int data;
-	struct Node* next; //그 다음 변수를 가리키는 next 구조체 변수 선언
-} Node;
-Node* head;//항상 연결리스트는 head로 시작하기 때문에 head 노드를 만들어줘야한다.(동적할당을 할것이기 때문에 포인터 사용)
-////연결리스트 구조체 사용하기
+//#define _CRT_SECURE_NO_WARNINGS_
+//#include <stdio.h>
+//#include <stdlib.h>
+//
+//typedef struct {
+//	int data;
+//	struct Node* next; //그 다음 변수를 가리키는 next 구조체 변수 선언
+//} Node;
+//Node* head;//항상 연결리스트는 head로 시작하기 때문에 head 노드를 만들어줘야한다.(동적할당을 할것이기 때문에 포인터 사용)
+//////연결리스트 구조체 사용하기
 
 
 //int main(void) {
@@ -110,53 +110,53 @@ Node* head;//항상 연결리스트는 head로 시작하기 때문에 head 노드를 만들어줘야한다
 //	system("pause");
 //	return 0;
 //}
-//연결리스트 삽입과정
-void add(Node*root, int data) {
-	Node *node = (Node*)malloc(sizeof(Node));
-	node->data = data;
-	node->next = root->next;
-	root->next = node;
-}
-
-
-//연결리스트 삭제과정
-void del(Node* root) {
-	Node* front = root->next;
-	root->next = front->next;
-	free(front);
-}
-
-//연결 리스트 메모리 해제 함수
-void freeAll(Node* root) {
-	Node* cur = head->next;
-	while (cur != NULL) {
-		Node* next = cur->next;
-		free(cur);
-		cur = next;
-	}
-}
-//연결리스트 전체 출력 함수
- 
-void showAll(Node* root) {
-	Node* cur = head->next;
-	while (cur != NULL) {
-		printf("%d ", cur->data);
-		cur = cur->next;
-	}
-}
-
-int main(void) {
-	head = (Node*)malloc(sizeof(Node));
-	head->next = NULL;
-	add(head, 1);
-	add(head, 0);
-	add(head, -1);
-	del(head);
-	showAll(head);
-	freeAll(head);
-	system("pause");
-	return 0;
-}
+////연결리스트 삽입과정
+//void add(Node*root, int data) {
+//	Node *node = (Node*)malloc(sizeof(Node));
+//	node->data = data;
+//	node->next = root->next;
+//	root->next = node;
+//}
+//
+//
+////연결리스트 삭제과정
+//void del(Node* root) {
+//	Node* front = root->next;
+//	root->next = front->next;
+//	free(front);
+//}
+//
+////연결 리스트 메모리 해제 함수
+//void freeAll(Node* root) {
+//	Node* cur = head->next;
+//	while (cur != NULL) {
+//		Node* next = cur->next;
+//		free(cur);
+//		cur = next;
+//	}
+//}
+////연결리스트 전체 출력 함수
+// 
+//void showAll(Node* root) {
+//	Node* cur = head->next;
+//	while (cur != NULL) {
+//		printf("%d ", cur->data);
+//		cur = cur->next;
+//	}
+//}
+//
+//int main(void) {
+//	head = (Node*)malloc(sizeof(Node));
+//	head->next = NULL;
+//	add(head, 1);
+//	add(head, 0);
+//	add(head, -1);
+//	del(head);
+//	showAll(head);
+//	freeAll(head);
+//	system("pause");
+//	return 0;
+//}
 //연결리스트 구현 주의점
 //소스코드에 덧붙여서 삽입, 삭제 기능에서의 예외상항을 처리할 필요가 있다.
 //삭제할 원소가 없는데 삭제하는 경우, head노드 자체를 잘못 넣는 경우 등을 체크해야한다
@@ -168,3 +168,86 @@ int main(void) {
 //연결리스트는 데이터를 선형적으로 저장하고 처리하는 방법
 //기존에 배열을 이용했을때보다 삽입과 삭제가 많은 경우에서 효율적
 //특정 인덱스에 바로 참조해야할때가 많다면 배열을 이용하는 것이 효율적
+
+
+//양방향 연결리스트: 머리와 꼬리를 모두 가진다
+//각 노드는 앞노드와 뒤 노드의 정보를 모두 저장하고 있다.
+//데이터를 '오름차순'으로 저장하는 양방향 연결리스트 구현
+//(prev | data | next) <-> (prev | data | next) ...
+#define _CRT_SECURE_NO_WARNINGS_
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct {
+	int data;
+	struct Node* prev;
+	struct Node* next;
+}Node;
+
+Node* head, * tail;
+
+//양방향 연결 리스트 삽입과정
+
+void insert(int data) {
+	/*Node* node = (Node*)malloc(sizeof(Node));
+	node->data = data;
+	root->next = node->prev;
+	node->prev = root->next;
+	Node* back = root->next;
+	back->prev = node->next;
+	node->next = back->prev;*/ //내가 혼자 만든거다..맞는지는 잘 모르겠다ㅜㅜ
+	//root의 next가 node(삽입할것)을 가리키고, node의 pre가 root의 next를 가리키도록 한다.
+	//그 후에 back(기존의 root앞)의 pre가 node의 pre를 가리키고, node의 next가 back의 pre를 가리킴
+	//순서를 잘 지켜야한다.
+	
+	Node* node = (Node*)malloc(sizeof(Node));
+	node->data = data;
+	Node* cur;
+	cur = head->next;
+	while (cur->data < data && cur != tail) {
+		cur = cur->next;
+	}
+	Node* prev = cur->prev;
+	prev->next = node;
+	node->prev = prev;
+	cur->prev = node;
+	node->next = cur;
+}
+
+void removeFront() {
+	Node* node = head->next;
+	head->next = node->next;
+	Node* next = node->next;
+	next->prev = head;
+	free(node);
+}
+void show() {
+	Node* cur = head->next;
+	while (cur != tail) {
+		printf("%d ", cur->data);
+		cur = cur->next;
+	}
+}
+
+int main(void) {
+	head = (Node*)malloc(sizeof(Node));
+	tail = (Node*)malloc(sizeof(Node));
+	head->next = tail;
+	head->prev = head;
+	tail->next = tail;
+	tail->prev = head;
+	insert(2);
+	insert(1);
+	insert(3);
+	insert(9);
+	insert(7);
+	removeFront();
+	show();
+	system("pause");
+	return 0;
+}
+//양방향 연결 리스트 구현에 있어서 주의점
+//위 소스코드에 덧붙여서 삽입 및 삭제 기능에서의 예외 상항을 처리할 필요가 있다.
+//더이상 삭제할 원소가 없는데 삭제하는 경우를 주의해야 한다.
+
+//양방향 연결 리스트 장점: 리스트의 앞에서 또는 뒤에서 모두 접근 가능하다(메모리 공간 단일연결보다 2배 차지)
